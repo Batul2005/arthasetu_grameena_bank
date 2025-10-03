@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Landmark } from "lucide-react";
 
 const Login = () => {
@@ -13,6 +15,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,8 +24,8 @@ const Login = () => {
     // Simulate API call
     setTimeout(() => {
       toast({
-        title: "Login Successful",
-        description: "Welcome back to Rural NetBanking!",
+        title: t("loginSuccessful"),
+        description: t("loginSuccessMessage"),
       });
       navigate("/dashboard");
       setIsLoading(false);
@@ -32,26 +35,27 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-between items-center mb-8">
           <Link to="/" className="flex items-center gap-2 text-primary">
             <Landmark className="h-8 w-8" />
-            <span className="text-2xl font-bold">Rural NetBank</span>
+            <span className="text-2xl font-bold">{t("appName")}</span>
           </Link>
+          <LanguageSelector />
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Welcome Back</CardTitle>
-            <CardDescription>Login to access your account</CardDescription>
+            <CardTitle>{t("welcomeBack")}</CardTitle>
+            <CardDescription>{t("loginToAccess")}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder={t("emailPlaceholder")}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -59,11 +63,11 @@ const Login = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t("password")}</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder={t("passwordPlaceholder")}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -71,13 +75,13 @@ const Login = () => {
               </div>
 
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
+                {isLoading ? t("loggingIn") : t("login")}
               </Button>
 
               <div className="text-center text-sm text-muted-foreground">
-                Don't have an account?{" "}
+                {t("dontHaveAccount")}{" "}
                 <Link to="/register" className="text-primary hover:underline font-medium">
-                  Register here
+                  {t("registerHere")}
                 </Link>
               </div>
             </form>

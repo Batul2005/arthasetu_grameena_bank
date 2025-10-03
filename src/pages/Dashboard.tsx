@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   Landmark, 
   CreditCard, 
@@ -16,12 +18,13 @@ import { useState } from "react";
 
 const Dashboard = () => {
   const [showBalance, setShowBalance] = useState(true);
+  const { t } = useLanguage();
 
   const quickActions = [
-    { icon: ArrowUpRight, label: "Send Money", color: "text-primary" },
-    { icon: ArrowDownLeft, label: "Request Money", color: "text-secondary" },
-    { icon: CreditCard, label: "Pay Bills", color: "text-accent" },
-    { icon: History, label: "Transaction History", color: "text-muted-foreground" },
+    { icon: ArrowUpRight, label: t("sendMoney"), color: "text-primary" },
+    { icon: ArrowDownLeft, label: t("requestMoney"), color: "text-secondary" },
+    { icon: CreditCard, label: t("payBills"), color: "text-accent" },
+    { icon: History, label: t("transactionHistory"), color: "text-muted-foreground" },
   ];
 
   return (
@@ -31,10 +34,11 @@ const Dashboard = () => {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 text-primary">
             <Landmark className="h-6 w-6" />
-            <span className="text-xl font-bold">Rural NetBank</span>
+            <span className="text-xl font-bold">{t("appName")}</span>
           </Link>
           
           <div className="flex items-center gap-2">
+            <LanguageSelector />
             <Button variant="ghost" size="icon">
               <Settings className="h-5 w-5" />
             </Button>
@@ -50,15 +54,15 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Welcome back, John!</h1>
-          <p className="text-muted-foreground">Here's your account overview</p>
+          <h1 className="text-3xl font-bold mb-2">{t("welcomeUser")}, John!</h1>
+          <p className="text-muted-foreground">{t("accountOverview")}</p>
         </div>
 
         {/* Balance Card */}
         <Card className="mb-8 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardDescription className="text-primary-foreground/80">Total Balance</CardDescription>
+              <CardDescription className="text-primary-foreground/80">{t("totalBalance")}</CardDescription>
               <Button 
                 variant="ghost" 
                 size="icon"
@@ -75,12 +79,12 @@ const Dashboard = () => {
           <CardContent>
             <div className="flex gap-4 text-sm">
               <div>
-                <p className="text-primary-foreground/80">Account Number</p>
+                <p className="text-primary-foreground/80">{t("accountNumber")}</p>
                 <p className="font-semibold">**** **** 4567</p>
               </div>
               <div>
-                <p className="text-primary-foreground/80">Account Type</p>
-                <p className="font-semibold">Savings</p>
+                <p className="text-primary-foreground/80">{t("accountType")}</p>
+                <p className="font-semibold">{t("savings")}</p>
               </div>
             </div>
           </CardContent>
@@ -88,7 +92,7 @@ const Dashboard = () => {
 
         {/* Quick Actions */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+          <h2 className="text-xl font-semibold mb-4">{t("quickActions")}</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {quickActions.map((action, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
@@ -104,16 +108,16 @@ const Dashboard = () => {
         {/* Recent Transactions */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Transactions</CardTitle>
-            <CardDescription>Your latest banking activities</CardDescription>
+            <CardTitle>{t("recentTransactions")}</CardTitle>
+            <CardDescription>{t("latestActivities")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {[
-                { name: "Grocery Store", amount: "-₹ 2,450", date: "Today", type: "debit" },
-                { name: "Salary Credit", amount: "+₹ 45,000", date: "2 days ago", type: "credit" },
-                { name: "Electric Bill", amount: "-₹ 1,200", date: "3 days ago", type: "debit" },
-                { name: "ATM Withdrawal", amount: "-₹ 5,000", date: "5 days ago", type: "debit" },
+                { name: t("groceryStore"), amount: "-₹ 2,450", date: t("today"), type: "debit" },
+                { name: t("salaryCredit"), amount: "+₹ 45,000", date: `2 ${t("daysAgo")}`, type: "credit" },
+                { name: t("electricBill"), amount: "-₹ 1,200", date: `3 ${t("daysAgo")}`, type: "debit" },
+                { name: t("atmWithdrawal"), amount: "-₹ 5,000", date: `5 ${t("daysAgo")}`, type: "debit" },
               ].map((transaction, index) => (
                 <div key={index} className="flex items-center justify-between py-2 border-b last:border-0">
                   <div>
@@ -129,7 +133,7 @@ const Dashboard = () => {
               ))}
             </div>
             <Button variant="link" className="w-full mt-4">
-              View All Transactions
+              {t("viewAllTransactions")}
             </Button>
           </CardContent>
         </Card>

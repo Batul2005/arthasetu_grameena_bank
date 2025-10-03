@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Landmark } from "lucide-react";
 
 const Register = () => {
@@ -18,14 +20,15 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
       toast({
-        title: "Error",
-        description: "Passwords do not match",
+        title: t("error"),
+        description: t("passwordMismatch"),
         variant: "destructive",
       });
       return;
@@ -36,8 +39,8 @@ const Register = () => {
     // Simulate API call
     setTimeout(() => {
       toast({
-        title: "Account Created",
-        description: "Your account has been created successfully!",
+        title: t("accountCreated"),
+        description: t("accountCreatedMessage"),
       });
       navigate("/login");
       setIsLoading(false);
@@ -54,26 +57,27 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-muted/30 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-between items-center mb-8">
           <Link to="/" className="flex items-center gap-2 text-primary">
             <Landmark className="h-8 w-8" />
-            <span className="text-2xl font-bold">Rural NetBank</span>
+            <span className="text-2xl font-bold">{t("appName")}</span>
           </Link>
+          <LanguageSelector />
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Create Account</CardTitle>
-            <CardDescription>Join Rural NetBanking today</CardDescription>
+            <CardTitle>{t("createAccount")}</CardTitle>
+            <CardDescription>{t("joinToday")}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
+                <Label htmlFor="fullName">{t("fullName")}</Label>
                 <Input
                   id="fullName"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder={t("fullNamePlaceholder")}
                   value={formData.fullName}
                   onChange={handleChange}
                   required
@@ -81,11 +85,11 @@ const Register = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder={t("emailPlaceholder")}
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -93,11 +97,11 @@ const Register = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phone">Phone Number</Label>
+                <Label htmlFor="phone">{t("phoneNumber")}</Label>
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="+91 9876543210"
+                  placeholder={t("phonePlaceholder")}
                   value={formData.phone}
                   onChange={handleChange}
                   required
@@ -105,11 +109,11 @@ const Register = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">{t("password")}</Label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder={t("passwordPlaceholder")}
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -117,11 +121,11 @@ const Register = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword">{t("confirmPassword")}</Label>
                 <Input
                   id="confirmPassword"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder={t("passwordPlaceholder")}
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
@@ -129,13 +133,13 @@ const Register = () => {
               </div>
 
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating Account..." : "Create Account"}
+                {isLoading ? t("creatingAccount") : t("createAccount")}
               </Button>
 
               <div className="text-center text-sm text-muted-foreground">
-                Already have an account?{" "}
+                {t("alreadyHaveAccount")}{" "}
                 <Link to="/login" className="text-primary hover:underline font-medium">
-                  Login here
+                  {t("loginHere")}
                 </Link>
               </div>
             </form>
