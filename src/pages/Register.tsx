@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { authService } from "@/lib/auth";
 import { Landmark } from "lucide-react";
 
 const Register = () => {
@@ -21,6 +23,13 @@ const Register = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard");
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,15 +45,27 @@ const Register = () => {
 
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    const { data, error } = await authService.signUp(formData);
+
+    if (error) {
+      toast({
+        title: t("error"),
+        description: error,
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (data) {
       toast({
         title: t("accountCreated"),
         description: t("accountCreatedMessage"),
       });
-      navigate("/login");
-      setIsLoading(false);
-    }, 1000);
+      navigate("/dashboard");
+    }
+    
+    setIsLoading(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
