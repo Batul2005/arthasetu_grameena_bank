@@ -1,12 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useAuth } from "@/contexts/AuthContext";
-import { authService } from "@/lib/auth";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import { 
   Landmark, 
   CreditCard, 
@@ -18,66 +14,11 @@ import {
   Eye,
   EyeOff
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const Dashboard = () => {
   const [showBalance, setShowBalance] = useState(true);
-  const [profile, setProfile] = useState<any>(null);
-  const [account, setAccount] = useState<any>(null);
-  const [transactions, setTransactions] = useState<any[]>([]);
   const { t } = useLanguage();
-  const { user } = useAuth();
-  const { toast } = useToast();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) {
-      fetchUserData();
-    }
-  }, [user]);
-
-  const fetchUserData = async () => {
-    if (!user) return;
-
-    // Fetch profile
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-
-    setProfile(profileData);
-
-    // Fetch account
-    const { data: accountData } = await supabase
-      .from("accounts")
-      .select("*")
-      .eq("user_id", user.id)
-      .single();
-
-    setAccount(accountData);
-
-    // Fetch recent transactions
-    if (accountData) {
-      const { data: txData } = await supabase
-        .from("transactions")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(5);
-
-      setTransactions(txData || []);
-    }
-  };
-
-  const handleLogout = async () => {
-    await authService.signOut();
-    toast({
-      title: t("loggedOut"),
-      description: t("loggedOutMessage"),
-    });
-    navigate("/");
-  };
 
   const quickActions = [
     { icon: ArrowUpRight, label: t("sendMoney"), color: "text-primary" },
@@ -101,8 +42,10 @@ const Dashboard = () => {
             <Button variant="ghost" size="icon">
               <Settings className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={handleLogout}>
-              <LogOut className="h-5 w-5" />
+            <Button variant="ghost" size="icon" asChild>
+              <Link to="/">
+                <LogOut className="h-5 w-5" />
+              </Link>
             </Button>
           </div>
         </div>
@@ -111,9 +54,7 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
-            {t("welcomeUser")}, {profile?.full_name || t("user")}!
-          </h1>
+          <h1 className="text-3xl font-bold mb-2">{t("welcomeUser")}, John!</h1>
           <p className="text-muted-foreground">{t("accountOverview")}</p>
         </div>
 
@@ -132,25 +73,18 @@ const Dashboard = () => {
               </Button>
             </div>
             <CardTitle className="text-4xl font-bold">
-              {showBalance 
-                ? `₹ ${account?.balance?.toLocaleString('en-IN', { minimumFractionDigits: 2 }) || '0.00'}` 
-                : "₹ •••••••"
-              }
+              {showBalance ? "₹ 1,24,567.89" : "₹ •••••••"}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex gap-4 text-sm">
               <div>
                 <p className="text-primary-foreground/80">{t("accountNumber")}</p>
-                <p className="font-semibold">
-                  {account?.account_number 
-                    ? `**** **** ${account.account_number.slice(-4)}` 
-                    : "****"}
-                </p>
+                <p className="font-semibold">**** **** 4567</p>
               </div>
               <div>
                 <p className="text-primary-foreground/80">{t("accountType")}</p>
-                <p className="font-semibold">{t(account?.account_type || "savings")}</p>
+                <p className="font-semibold">{t("savings")}</p>
               </div>
             </div>
           </CardContent>
@@ -179,27 +113,24 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {transactions.length === 0 ? (
-                <p className="text-center text-muted-foreground py-8">
-                  {t("noTransactions")}
-                </p>
-              ) : (
-                transactions.map((transaction) => (
-                  <div key={transaction.id} className="flex items-center justify-between py-2 border-b last:border-0">
-                    <div>
-                      <p className="font-medium">{transaction.description}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {new Date(transaction.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <p className={`font-semibold ${
-                      transaction.transaction_type === "credit" ? "text-secondary" : "text-foreground"
-                    }`}>
-                      {transaction.transaction_type === "credit" ? "+" : "-"}₹ {transaction.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                    </p>
+              {[
+                { name: t("groceryStore"), amount: "-₹ 2,450", date: t("today"), type: "debit" },
+                { name: t("salaryCredit"), amount: "+₹ 45,000", date: `2 ${t("daysAgo")}`, type: "credit" },
+                { name: t("electricBill"), amount: "-₹ 1,200", date: `3 ${t("daysAgo")}`, type: "debit" },
+                { name: t("atmWithdrawal"), amount: "-₹ 5,000", date: `5 ${t("daysAgo")}`, type: "debit" },
+              ].map((transaction, index) => (
+                <div key={index} className="flex items-center justify-between py-2 border-b last:border-0">
+                  <div>
+                    <p className="font-medium">{transaction.name}</p>
+                    <p className="text-sm text-muted-foreground">{transaction.date}</p>
                   </div>
-                ))
-              )}
+                  <p className={`font-semibold ${
+                    transaction.type === "credit" ? "text-secondary" : "text-foreground"
+                  }`}>
+                    {transaction.amount}
+                  </p>
+                </div>
+              ))}
             </div>
             <Button variant="link" className="w-full mt-4">
               {t("viewAllTransactions")}

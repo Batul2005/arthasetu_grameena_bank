@@ -122,10 +122,6 @@ const translations: Record<Language, Record<string, string>> = {
     electricBill: "Electric Bill",
     atmWithdrawal: "ATM Withdrawal",
     startJourney: "Start Your Journey",
-    loggedOut: "Logged Out",
-    loggedOutMessage: "You have been logged out successfully",
-    user: "User",
-    noTransactions: "No transactions yet",
   },
   hi: {
     // Branding
@@ -230,10 +226,6 @@ const translations: Record<Language, Record<string, string>> = {
     electricBill: "बिजली बिल",
     atmWithdrawal: "एटीएम निकासी",
     startJourney: "अपनी यात्रा शुरू करें",
-    loggedOut: "लॉग आउट",
-    loggedOutMessage: "आप सफलतापूर्वक लॉग आउट हो गए हैं",
-    user: "उपयोगकर्ता",
-    noTransactions: "अभी तक कोई लेनदेन नहीं",
   },
   kn: {
     // Branding
@@ -338,10 +330,6 @@ const translations: Record<Language, Record<string, string>> = {
     electricBill: "ವಿದ್ಯುತ್ ಬಿಲ್",
     atmWithdrawal: "ಎಟಿಎಂ ಹಿಂಪಡೆಯುವಿಕೆ",
     startJourney: "ನಿಮ್ಮ ಪ್ರಯಾಣವನ್ನು ಪ್ರಾರಂಭಿಸಿ",
-    loggedOut: "ಲಾಗ್ ಔಟ್",
-    loggedOutMessage: "ನೀವು ಯಶಸ್ವಿಯಾಗಿ ಲಾಗ್ ಔಟ್ ಆಗಿದ್ದೀರಿ",
-    user: "ಬಳಕೆದಾರ",
-    noTransactions: "ಇನ್ನೂ ಯಾವುದೇ ವಹಿವಾಟುಗಳಿಲ್ಲ",
   },
   tu: {
     // Branding (Tulu - using Kannada script)
@@ -446,10 +434,6 @@ const translations: Record<Language, Record<string, string>> = {
     electricBill: "ವಿದ್ಯುತ್ ಬಿಲ್",
     atmWithdrawal: "ಎಟಿಎಂ ಹಿಂದೆತ್ತುನ",
     startJourney: "ನಿಮ್ಮ ಪ್ರಯಾಣ ಶುರು ಮಲ್ಪುಲೆ",
-    loggedOut: "ಲಾಗ್ ಔಟ್",
-    loggedOutMessage: "ಈರ್ ಯಶಸ್ವಿಯಾಗಿ ಲಾಗ್ ಔಟ್ ಆಪುಂಡು",
-    user: "ಬಳಕೆದಾರ",
-    noTransactions: "ಇನ್ನೂ ವಹಿವಾಟು ಇಜ್ಜಿ",
   },
 };
 

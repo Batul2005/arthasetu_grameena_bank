@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,8 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useAuth } from "@/contexts/AuthContext";
-import { authService } from "@/lib/auth";
 import { Landmark } from "lucide-react";
 
 const Login = () => {
@@ -18,39 +16,20 @@ const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
-  const { user } = useAuth();
-
-  useEffect(() => {
-    if (user) {
-      navigate("/dashboard");
-    }
-  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const { data, error } = await authService.signIn({ email, password });
-
-    if (error) {
-      toast({
-        title: t("error"),
-        description: error,
-        variant: "destructive",
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    if (data) {
+    // Simulate API call
+    setTimeout(() => {
       toast({
         title: t("loginSuccessful"),
         description: t("loginSuccessMessage"),
       });
       navigate("/dashboard");
-    }
-    
-    setIsLoading(false);
+      setIsLoading(false);
+    }, 1000);
   };
 
   return (
